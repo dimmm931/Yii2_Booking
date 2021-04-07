@@ -32,13 +32,13 @@
 
 ![Screenshot](web/images/Screenshots/6.png)
 
-![Screenshot](eb/images/Screenshots/7.png)
+![Screenshot](web/images/Screenshots/7.png)
 
-![Screenshot](eb/images/Screenshots/8.png)
+![Screenshot](web/images/Screenshots/8.png)
 
 ### Dates validation. 
 
-![Screenshot](eb/images/Screenshots/9.png)
+![Screenshot](web/images/Screenshots/9.png)
 
 ### Gif video.
 
@@ -49,11 +49,7 @@
 
 
 
-###
-
-
-
-
+### Yii2 Info
 
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
