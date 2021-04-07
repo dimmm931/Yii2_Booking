@@ -1,0 +1,201 @@
+
+/* Booking CPH-2 Hotel (created based on BookingCPH but it is a version with multiple rooms) */
+.my-month{
+	border: 1px solid black;
+	padding: 2em;
+	margin-bottom: 2em;
+	margin-left: 2%;
+	background: lavender;
+	cursor:pointer;
+	color:black;
+}
+
+/* Month Text */
+.v{font-size:1.5em;}
+
+
+
+/* ---------------------------------------- Mobile */
+@media screen and (max-width: 480px) { 
+   #unlck {width:74%;} /* */
+}
+/* ---------------------------------------- Mobile */
+
+
+
+/* round icon with quantity of tickets in cookie */
+.badge1[data-badge]:after {
+   content:attr(data-badge);
+   position:absolute;
+   top:-10px;
+   right:-10px;
+   font-size:.8em;
+   background:red;
+   color:white;
+   width:25px;height:25px; /* badge circle with*/
+   text-align:center;
+   line-height:16px;
+   border-radius:50%;
+   box-shadow:0 0 1px #333;
+   padding: .3em;
+}
+
+
+.single-clicked-month{
+	font-size: 1em;
+}
+
+
+.free{
+	background:green;	
+}
+
+.taken{
+	background:red;
+}
+
+.red{color:red;}
+
+.blank{background:grey;}
+
+/*----Hover over free seats---*/	
+.free:hover{
+	background:yellow;
+	cursor:pointer;
+}
+
+/*----Hover over taken seats-*/	
+.taken:hover, .blank:hover{
+	background:pink;
+	cursor:not-allowed;
+}
+
+.example-taken{
+	background:red;
+	padding:0.1em 0.5em; /* h,w */
+	margin-right:0.5em;
+}
+
+
+
+/*----Calendar table colors-*/
+table{color:white;}
+
+table th{
+	background:purple;
+	color:white;
+}
+
+
+.border div {
+    border: 1px solid #000000;
+	font-size:0.7em;
+}
+
+/*----Padding inside div of Guest List table, from, to, duration, delete-*/
+.guestList div{
+	padding:2em;
+}
+
+/* ------------------------------ Mobile */
+@media screen and (max-width: 480px) { 
+   .guestList div{padding:1em 0.2em 1em 0.2em;  word-break: break-all; }
+   
+
+}
+/* ----------------------------- Mobile */
+
+
+/* Delete imag in Guest List table */
+.deleteBooking{
+	cursor:pointer;
+}
+
+
+
+
+/* Fix to make all divs in Guest List table of the same hight */
+.guestList{
+	display: table; /* Make the container element behave like a table */
+    width: 100%; /* Set full-width to expand the whole page */}
+	
+.colX {
+    display: table-cell; /* Make elements inside the container behave like table cells */
+}
+/* END Fix to make all dicvs the same hight */
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* SUBFOLDER => Rooms Month Icons CSS */
+
+/* subfolder icons CSS, used  in  Site/actionFolderGallery(), view=> many-folder-gallery */
+.subfolder a {color:black;}
+.subfolder:hover {background:red; }
+
+/*div that contains folder img and folder name*/
+.subfolder{
+	color:black;
+	border:  1px solid black; border-radius:17%; /*dotted*/
+	padding: 1em;
+	width: 12%;
+	margin-right: 3%;
+	margin-bottom: 1em;
+	float:left;
+	word-break: break-all;
+	background-color: lavender;
+	/*
+	background:  url(../images/folder.png) ; //no-repeat scroll center center 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain; // To scale the background image to fit inside the div. Was: cover
+    position: relative;
+	*/
+	/* animate smoothly */
+	cursor:pointer;
+	transition: 1.25s;
+   -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+.subfolder img {width:26%;}
+/* subfolder CSS, used  in  Site/actionFolderGallery(), view=> many-folder-gallery */
+
+.rooms{margin-bottom:3em;}
+
+@media screen and (max-width: 480px) { 
+  .subfolder img {width:76%;}
+  .subfolder{width: 44%; font-size:0.9em;}
+}
+
+/* END SUBFOLDER CSS */
+
+
+
+
+/* CSS for clicked room */
+.selected{background:red;}
+#selectedRoom{font-size:3em; color:red;text-align: center; border:1px solid black; height:2em;border-radius:15%; background:lavender;}
+
+@media screen and (max-width: 480px) { 
+  #selectedRoom{font-size:2em; color:red;text-align: center; border:1px solid black; height:2em;margin-bottom: 2em;}
+}
+
+
+
+
+.shadowX, {
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .3),
+            -23px 0 20px -23px rgba(0, 0, 0, .6),
+            23px 0 20px -23px rgba(0, 0, 0, .6),
+            inset 0 0 40px rgba(0, 0, 0, .1);
+}

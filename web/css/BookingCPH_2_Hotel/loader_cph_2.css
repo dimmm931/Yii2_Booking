@@ -1,0 +1,67 @@
+/* Loader for WPress */
+
+
+/* CSS  FOR LOADER body to hide onLoad id  */
+/*.myAll{display:none;}*/
+
+
+
+/* PURE CSS LOADER, no code in index.php, just in loader.js -----------------------------------------------*/
+/* LOADER, we make body hidden by default, gets visible in 2 sec in JS */
+/* Center the loader */
+#loaderX {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  z-index: 1;
+  width: 250px;
+  height: 250px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  border-bottom: 16px solid #3498db;
+  /* border-right: 16px solid red;*/
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" to appear smoothly from bottom */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+/* - body id to hide firstly-*/
+#all{
+display: none; }
+
+  /*text-align: center;*/
+  
+ /* END  LOADER, we make body hidden by default, gets visible in 2 sec in JS */
+ /* END PURE CSS LOADER, no code in index.php, just in loader.js*/
