@@ -1,44 +1,44 @@
 ## Booking application on Yii2
 
-- <p>A Yii2 application to book dates</p>
+- <p>A Yii2 application to book dates.</p>
 - <p>App works on SQL DB, to run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
 - <p>Edit you database name at <b>/config/db.php</b> </p>
 - <p>Then use <b>php yii migrate</b> to migrate databases.
- -<p>To migrate RBAC tables<b>php yii migrate --migrationPath=@yii/rbac/migrations/</b>
+- <p>To migrate RBAC tables<b>php yii migrate --migrationPath=@yii/rbac/migrations/</b></p>
 
 - <p> To test on localhost, apart from above you must have PHP installed and  Web server running on your machine </p>
 
 ## Brief overview of application
 
-![Screenshot](public/images/Screenshots/1.png)
+![Screenshot](web/images/Screenshots/1.png)
 
 ### Custom calendar to select dates.
 
-![Screenshot](public/images/Screenshots/2.png)
+![Screenshot](web/images/Screenshots/2.png)
 
 ### Picking a new date. 
 
-![Screenshot](public/images/Screenshots/3.png)
+![Screenshot](web/images/Screenshots/3.png)
 
 ### Fill in the form. 
 
-![Screenshot](public/images/Screenshots/4.png)
+![Screenshot](web/images/Screenshots/4.png)
 
 ### Booking succefull. 
 
-![Screenshot](public/images/Screenshots/5.png)
+![Screenshot](web/images/Screenshots/5.png)
 
 ### Booked dates are displayed as red on the calendar. 
 
-![Screenshot](public/images/Screenshots/6.png)
+![Screenshot](web/images/Screenshots/6.png)
 
-![Screenshot](public/images/Screenshots/7.png)
+![Screenshot](eb/images/Screenshots/7.png)
 
-![Screenshot](public/images/Screenshots/8.png)
+![Screenshot](eb/images/Screenshots/8.png)
 
 ### Dates validation. 
 
-![Screenshot](public/images/Screenshots/9.png)
+![Screenshot](eb/images/Screenshots/9.png)
 
 ### Gif video.
 
@@ -49,7 +49,7 @@
 
 
 
-
+###
 
 
 
