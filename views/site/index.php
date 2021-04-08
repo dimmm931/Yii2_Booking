@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 $this->title = 'Booking';
 ?>
+
 <div class="site-index">
 
     <div class="jumbotron">

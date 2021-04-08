@@ -93,8 +93,8 @@ table th{
 }
 
 /*----Padding inside div of Guest List table, from, to, duration, delete-*/
-.guestList div{
-	padding:2em;
+.guestList div {
+	padding-top:2em;
 }
 
 /* ------------------------------ Mobile */

@@ -1,13 +1,14 @@
 ## Booking application on Yii2
 
-- <p>A Yii2 application to book dates.</p>
+- <p>A Yii2 application for users to book dates.</p>
 - <p>App works on SQL DB, to run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
 - <p>Edit you database name at <b>/config/db.php</b> </p>
 - <p>Then use <b>php yii migrate</b> to migrate databases.
 - <p>To migrate RBAC tables<b>php yii migrate --migrationPath=@yii/rbac/migrations/</b></p>
-
 - <p> To test on localhost, apart from above you must have PHP installed and  Web server running on your machine </p>
 
+- <p>You may create a new user or login using login: <b>test</b>, password: <b>testtest</b></p>
+- <p>After login you will be redirected to your personal account, where you can book, view or delete your dates and view calendar free dates or booked ones by you or other users</p>
 ## Brief overview of application
 
 ![Screenshot](web/images/Screenshots/1.png)
@@ -40,14 +41,15 @@
 
 ![Screenshot](web/images/Screenshots/9.png)
 
+### Delete your booked dates, id needed. 
+
+![Screenshot](web/images/Screenshots/10.png)
+
 ### Gif video.
 
 ![image](https://drive.google.com/uc?export=view&id=1r2D2W9z1NomG5evTNhsS51INeCSafFfH)
 
-
 [Watch full video on Youtube]( https://youtu.be/sVGchh9u-bE )
-
-
 
 ### Yii2 Info
 
