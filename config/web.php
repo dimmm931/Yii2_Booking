@@ -23,6 +23,8 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    
+    'defaultRoute' => 'booking-cph-v2-hotel/index',
 	
 	//Components
     'components' => [
@@ -32,12 +34,8 @@ $config = [
               // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
               'cookieValidationKey' => 'fdgeggdfgb54654645t',
 			  
-			  //'baseUrl'=> '',
-			  
-			  //mine
-		      /*'parsers' => [
-                'application/json' => 'yii\web\JsonParser',
-              ],*/
+			//'baseUrl'=> '',
+            
         ],
 		
 		
@@ -45,26 +43,8 @@ $config = [
 		'response' => [
            //'format' => \yii\web\Response::FORMAT_JSON, //GIVES OUT JSON!!!!!!!!!!!!
         ],
-	
-	    //mine JSON
-	
-	
-	    
 		
 		
-	/*	
-	'response' => [
-    // ...
-    'formatters' => [
-        \yii\web\Response::FORMAT_JSON => [
-            'class' => 'yii\web\JsonResponseFormatter',
-            'prettyPrint' => YII_DEBUG, // используем "pretty" в режиме отладки
-            'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-            // ...
-        ],
-    ],
-],
-*/		
 	
         //Set my RBAC-----------------
         'authManager' => [
@@ -149,7 +129,7 @@ $config = [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
             ],
@@ -160,11 +140,12 @@ $config = [
         //PRETTY URL
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,  // Hide index.php
+            'showScriptName'  => false,  // Hide index.php
 			//'class' => 'yii\web\UrlManager',
             'rules' => [
+                 //'booking'               => 'booking-cph-v2-hotel/index',
 			     'rbac-management-table' => 'site/rbac', //pretty url for 1 action(if Yii sees 'site/rbac' it turn it to custom text)
-			     'yout-text-from-config-web-php.rar' => 'site/about', //pretty url for 1 action(if Yii sees 'site/about' it turn it to custom text)
+			     'about-me'              => 'site/about',            //pretty url for 1 action(if Yii sees 'site/about' it turn it to custom text)
 				 //Rules for REST API
 			     ['class' => 'yii\rest\UrlRule', 'controller' => ['rest'],  ], //rule for rest api, means if Yii sees any action of RestController, it uses yii\rest\UrlRule 
 				     //['extraPatterns' => ['GET /' => 'new'], /*'pluralize' => false*/ ], 

@@ -8,13 +8,6 @@ use yii\db\Migration;
 class m190523_102536_create_user_table extends Migration
 {
 	
-	
-	
-	
-	
-	
-	
-	
     public function up()
     {
         $tableOptions = null;
@@ -34,6 +27,14 @@ class m190523_102536_create_user_table extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
+        
+        //INSERT values
+		$this->batchInsert('user', ['username', 'password_hash', 'email'], [
+            ['dima', Yii::$app->getSecurity()->generatePasswordHash('dimadima'), 'dima@ukr.net'],
+            ['test', Yii::$app->getSecurity()->generatePasswordHash('testtest'), 'test@ukr.net'], 
+            
+		]);
+        
     }
  
     public function down()
@@ -42,14 +43,7 @@ class m190523_102536_create_user_table extends Migration
     }
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
     /**
      * {@inheritdoc}

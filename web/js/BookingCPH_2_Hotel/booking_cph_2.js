@@ -3,25 +3,7 @@
 $(document).ready(function(){
 	var clickedThis; //global var with $this ($this of clicked on a single month among 6 month )
 
-    //just for test, fillbadges with random numbers
-	/*
-    for(i = 0; i < $('.badge').length; i++){
-		var iter = (1 + i) * 7;
-		var b = i;
-        $('.badge:eq('+ b +')').attr('data-badge', iter);	//assign interger to badge
-	}
-	*/
-	
-	
-	
-	//onLoad sends ajax request to BookingCphControler->function actionAjax_get_6_month()
-	//get_6_month(); //DEACTIVATED!!!!!!!!
-	
-	
-	
-	
-	
-	
+   
 	
 	
 		
@@ -94,14 +76,15 @@ $(document).ready(function(){
 		$(".loader").show(200); //show the loader
 		
 		//getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
-		var loc = window.location.pathname;
+        var loc = window.location.pathname;
         var dir = loc.substring(0, loc.lastIndexOf('/'));
 		var urlX = dir + '/ajax_get_6_month';
-		//alert(urlX);
-		
+        
+	    
+        
 		// send  data  to  PHP handler  ************ 
         $.ajax({
-            url: urlX,
+            url: ajaxUrl, //ajaxUrl is a var registered in view,
             type: 'POST',
 			dataType: 'JSON', // without this it returned string(that can be alerted), now it returns object
 			//passing the city
@@ -207,7 +190,7 @@ $(document).ready(function(){
 		
 		 // send  data  to  PHP handler  ************ 
          $.ajax({
-            url: urlX,
+            url: ajaxUrl2, //var is registered in view
             type: 'POST',
 			dataType: 'text' ,//'JSON', // without this it returned string(that can be alerted), now it returns object
 			//passing the city

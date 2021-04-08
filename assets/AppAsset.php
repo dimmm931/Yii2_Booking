@@ -22,11 +22,8 @@ class AppAsset extends AssetBundle
 	
     public $css = [
         'css/site.css',
-		'css/rbac.css', //rbac css
 		'css/loader.css', //loader css
 		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', //fa fa lib 
-		'css/wpBlog.css', //wpress css
-		'css/bot.css', //bot css
 		
 		
 		//'css/bookingcph.css', //booking CPH css-> moved to a separate assert CPH_AssertOnly.php

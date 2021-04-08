@@ -5,22 +5,23 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
-//use yii\jui\DatePicker;
-//use yii\helpers\BaseHtml;
-/* @var $this yii\web\View */
 
 
+use app\assets\CPH_2_Hotel_AssertOnly;   // use your custom asset
+CPH_2_Hotel_AssertOnly::register($this); // register your custom asset to use this js/css bundle in this View only(1st name-> is the name of Class)
 
+//Register url for ajax
+use yii\helpers\Json;
+$url_1 = Yii::$app->getUrlManager()->getBaseUrl() . "/booking-cph-v2-hotel/ajax_get_6_month";
+$url_2 = Yii::$app->getUrlManager()->getBaseUrl() . "/booking-cph-v2-hotel/ajax_get_1_month";
+$this->registerJs("var ajaxUrl  = ".Json::encode($url_1).";" .
+                  "var ajaxUrl2 = ".Json::encode($url_2).";" ,
+                  yii\web\View::POS_HEAD,  'myproduct2-events-script' );
 
- use app\assets\CPH_2_Hotel_AssertOnly;   // use your custom asset
- CPH_2_Hotel_AssertOnly::register($this); // register your custom asset to use this js/css bundle in this View only(1st name-> is the name of Class)
 	   
 $this->title = 'Booking-2 Hotel';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-
-
 
 
   <div class="">

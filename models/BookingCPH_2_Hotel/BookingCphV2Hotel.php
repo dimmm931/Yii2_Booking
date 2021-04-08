@@ -3,6 +3,8 @@
 namespace app\models\BookingCPH_2_Hotel;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "booking_cph_v2_hotel".
@@ -27,6 +29,21 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
         return 'booking_cph_v2_hotel';
     }
 
+
+    
+    public function behaviors()
+    {
+        return [
+            [
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'entry_date',
+            'updatedAtAttribute' => false,
+            'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+    
+    
     /**
      * @inheritdoc
      */
@@ -34,8 +51,8 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
     {
         return [
             [['booked_by_user', 'booked_guest', 'book_from', 'book_to',  'booked_guest_email',  'book_room_id', ], 'required'], // 'booked_by_user', 'booked_guest_email',  'book_room_id', 'book_from_unix', 'book_to_unix',
-            [['book_from_unix', 'book_to_unix', 'book_room_id'], 'integer'],
-            [['booked_by_user', 'booked_guest', 'booked_guest_email'], 'string', 'max' => 77],
+            [['booked_by_user', 'book_from_unix', 'book_to_unix', 'book_room_id'], 'integer'],
+            [['booked_guest', 'booked_guest_email'], 'string', 'max' => 77],
             [['book_from', 'book_to'], 'string', 'max' => 33],
 			
 			['book_from','validateDatesX'], //my custom validation function. ['fromDate', 'compare', 'compareAttribute'=> 'toDate', 'operator' => '<', 
