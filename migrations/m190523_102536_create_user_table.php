@@ -29,11 +29,13 @@ class m190523_102536_create_user_table extends Migration
         ], $tableOptions);
         
         //INSERT values
+        /*
 		$this->batchInsert('user', ['username', 'password_hash', 'email'], [
             ['dima', Yii::$app->getSecurity()->generatePasswordHash('dimadima'), 'dima@ukr.net'],
             ['test', Yii::$app->getSecurity()->generatePasswordHash('testtest'), 'test@ukr.net'], 
             
 		]);
+        */
         
     }
  

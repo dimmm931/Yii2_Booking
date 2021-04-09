@@ -203,11 +203,12 @@ class BookingCphV2HotelController extends Controller
     public function actionAjax_get_1_month()
     {
 		error_reporting(E_ALL & ~E_NOTICE); //JUST TO FIX 000wen HOSTING, Hosting wants this only for Ajax Actions!!!!!!!!!!!!!!!
-		 
+		$model = new BookingCphV2Hotel(); 
+        
 		$array_1_Month_days = array();//will store 1 month data days, ie [5,6,7,8]
 		$array_allGuests = array();//will store all guests in relevant order according to values in $array_1_Month_days , ie [name, name]
 		$MonthList= array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"); //General array for all click actions
-		$overallBookedDays; //all amount of days booked in this month
+		//$overallBookedDays; //all amount of days booked in this month
 		$text; //will contain the whole result
 		 
 		$start = (int)$_POST['serverFirstDayUnix']; //1561939200 - 1st July;  //var is from ajax, 1st day of the month in Unix 
@@ -226,9 +227,13 @@ class BookingCphV2HotelController extends Controller
 				['between', 'book_from_unix', $start, $end  ], //$start, $end => is Unix
 			    ['between', 'book_to_unix',   $start, $end ] ])
 			->all(); 
-						
-						
-				 //guest list for $generalBookingInf //Forming here column names(like <TH>) for $guestList table, i.e(guest/start/end/duration/delete)
+        
+        //function that builds Guests List for this one month, 
+        $generalBookingInfo = $model->buildThisMonthBookedDaysList($thisMonthDataList); 
+		
+        
+		/*				
+		//guest list for $generalBookingInf //Forming here column names(like <TH>) for $guestList table, i.e(guest/start/end/duration/delete)
 		$guestList = "<div class='col-sm-12 col-xs-12 border guestList'>" . 
 		             "<div class='col-sm-3 col-xs-2 bg-primary colX'>Guest </div>" . 
 		             "<div class='col-sm-3 col-xs-3 bg-primary colX'>From  </div>" . 
@@ -236,10 +241,12 @@ class BookingCphV2HotelController extends Controller
 					 "<div class='col-sm-2 col-xs-2 bg-primary colX'>Duration</div>" .
 					 "<div class='col-sm-1 col-xs-2 bg-primary colX'>Delete  </div>" .
 					 "</div>";
-					   
-					   
+	
+              
 	    //complete $array_1_Month_days with booked days in this month, i,e [7,8,9,12,13]
+       
 		if ($thisMonthDataList) {
+            
 		    foreach ($thisMonthDataList as $a) {
 				
 			    //generating guest list var $guestList  for $generalBookingInfo, i.e(guest/start/end/duration/delete)
@@ -261,14 +268,19 @@ class BookingCphV2HotelController extends Controller
               			 " for Room <b>" . $_POST['serverRoom'] . "</b>" .             //room
 						 "&nbsp;<i class='fa fa-exclamation-triangle'></i></p><hr>";
 		}	
-		  
+		 
+          
+          
+          
+          
 		//Var with general info, ie "In June u have 2 guests. Overal amount of days are 22."
 		$generalBookingInfo = "<br><h3>In <b>" . date("F", $start).  //i.e June*
 		                       "</b> the amount of booking ranges you have: <i class='fa fa-calendar-check-o'></i><b>&nbsp;" . count($thisMonthDataList) . "</b>. <br><br>" .
 		                       "Overall amount of booked days are: <i class='fa fa-area-chart'></i>" . $overallBookedDays;
 							   
 		$generalBookingInfo.= "<hr><p><b>Guest list :</b></p>" . $guestList;
-	    //END Find For Guest List (only this User data)------------------------------------------------------
+	    */
+        //END Find For Guest List (only this User data)------------------------------------------------------
 		 
 
 		 
@@ -312,7 +324,10 @@ class BookingCphV2HotelController extends Controller
 		    }
 		}
 		
+        $calendarText = $model->buildCalendar($start, $end, $array_1_Month_days, $array_allGuests); 
+        $text = $text . $calendarText;
 		//START BUILDING A CALENDAR-----------------
+        /*
 		$dayofweek = (int)date('w', $start); //returns the numeric equivalent of weekday of the 1st day of the month, i.e 1. 1 means Monday (first days of Loop month is Monday)
 		$dayofweek = (($dayofweek + 6) % 7) + 1; //Mega Fix of Sundays, as Sundays in php are represented as {0}, and with this fix Sundays will be {7}
 		$breakCount = 0; //var to detect when to use a new line in table, i.e add <td>
@@ -327,7 +342,7 @@ class BookingCphV2HotelController extends Controller
 		}
 		 
 		//building the calendar with free/taken days
-		for($j = 1 /*$dayofweek*/; $j < (int)$lastDay[2]+1 /*count($array_1_Month_days)*/; $j++){  //$lastDay[2]+1 is a quantity of days in this month //$array_1_Month_days-> is an array with booked days in this month, i,e [7,8,9,12,13]
+		for($j = 1; $j < (int)$lastDay[2]+1 ; $j++){  //$lastDay[2]+1 is a quantity of days in this month //$array_1_Month_days-> is an array with booked days in this month, i,e [7,8,9,12,13]
 			//var to detect when to use a new line in table, i.e add <td>
 			if($breakCount%7 == 0) {
                 $text.= "<tr>";
@@ -347,6 +362,7 @@ class BookingCphV2HotelController extends Controller
 				$text.= "<td class='free iphoneX' onClick='' title='start booking' data-dayZ='".$day."'> " . $j . "</td>";
 			} 
 		}
+        */
 		//END BUILDING A CALENDAR---------------------
 		 
 		$text.= "</table><hr><hr>" . $generalBookingInfo; // . "<h4>Booked days array=>" . implode("-", $array_1_Month_days) ."</h4>"; // just to display array with booked days, i.e [4,5,6,18,19]

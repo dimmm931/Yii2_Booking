@@ -343,8 +343,109 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
  // Methods used in BookingCphController/aactionAjax_get_1_month() ---------------------------------------------------------------------------------------
  
  
- 
- 
+   	/**
+     * function that builds Guests List for this one month, completes $array_1_Month_days with booked days in this month, i,e [7,8,9,12,13]
+	 * @param collection of obejcts $thisMonthDataList
+     * @param int||string $overallBookedDays
+     * @return string $generalBookingInfo
+     * 
+     */
+   function buildThisMonthBookedDaysList($thisMonthDataList)
+   {
+        $overallBookedDays; //all amount of days booked in this month
+
+       //guest list for $generalBookingInf //Forming here column names(like <TH>) for $guestList table, i.e(guest/start/end/duration/delete)
+		$guestList = "<div class='col-sm-12 col-xs-12 border guestList'>" . 
+		             "<div class='col-sm-3 col-xs-2 bg-primary colX'>Guest </div>" . 
+		             "<div class='col-sm-3 col-xs-3 bg-primary colX'>From  </div>" . 
+					 "<div class='col-sm-3 col-xs-3 bg-primary colX'>To    </div>" . 
+					 "<div class='col-sm-2 col-xs-2 bg-primary colX'>Duration</div>" .
+					 "<div class='col-sm-1 col-xs-2 bg-primary colX'>Delete  </div>" .
+					 "</div>";
+                     
+        if ($thisMonthDataList) {
+            
+		    foreach ($thisMonthDataList as $a) {
+				
+			    //generating guest list var $guestList  for $generalBookingInfo, i.e(guest/start/end/duration/delete)
+			    $singleGuestDuration = (( $a->book_to_unix - $a->book_from_unix)/60/60/24) + 1; //amount of booked days for every guest
+			    $guestList.= "<div class='col-sm-12 col-xs-12 border guestList'>" . 
+				                 "<div class='col-sm-3 col-xs-2 colX'><i class='fa fa-calendar-check-o'></i>" . $a->booked_guest . "</div>" . //guest
+        			             "<div class='col-sm-3 col-xs-3 colX'>" . $a->book_from  .  "</div>" . //from
+						         "<div class='col-sm-3 col-xs-3 colX'>" . $a->book_to    . "</div>"  . //to
+						         "<div class='col-sm-2 col-xs-2 colX'>" . $singleGuestDuration . "</div>" . //duration
+						         "<div class='col-sm-1 col-xs-2 colX deleteBooking iphoneX' id='" . $a->book_id . "'> <i class='fa fa-cut' style='color:red;'></i></div>" .  //Delete icon
+							  "</div>";
+			    $overallBookedDays+= (( $a->book_to_unix - $a->book_from_unix)/60/60/24) + 1; //all amount of days booked in this month
+		     }
+		 
+		} else {
+			$overallBookedDays = " zero days";
+			$guestList = "<p style='color:red'>" .
+			             "You have NO Bookings in <b>" .  date("F-Y", $start) . "</b>" .  //month/year
+              			 " for Room <b>" . $_POST['serverRoom'] . "</b>" .             //room
+						 "&nbsp;<i class='fa fa-exclamation-triangle'></i></p><hr>";
+		}
+        
+          
+		//Var with general info, ie "In June u have 2 guests. Overal amount of days are 22."
+		$generalBookingInfo = "<br><h3>In <b>" . date("F", $start).  //i.e June*
+		                       "</b> the amount of booking ranges you have: <i class='fa fa-calendar-check-o'></i><b>&nbsp;" . count($thisMonthDataList) . "</b>. <br><br>" .
+		                       "Overall amount of booked days are: <i class='fa fa-area-chart'></i>" . $overallBookedDays;
+							   
+		$generalBookingInfo.= "<hr><p><b>Guest list :</b></p>" . $guestList; 
+        return $generalBookingInfo;        
+        
+    }
+    
+    
+    /**
+     * function that builds calendar
+	 * @param int $start, $_POST['serverFirstDayUnix']
+     * @param int $end,   $_POST['serverLastDayUnix']
+     * @param array of ints $array_1_Month_days, array with booked days in this month, i,e [7,8,9,12,13]
+     * @param array of strings $array_allGuests, will store all guests in relevant order according to values in $array_1_Month_days , ie [name, name]
+     * @return string $text
+     * 
+     */
+    function buildCalendar($start, $end, $array_1_Month_days, $array_allGuests)
+    {
+        $dayofweek = (int)date('w', $start); //returns the numeric equivalent of weekday of the 1st day of the month, i.e 1. 1 means Monday (first days of Loop month is Monday)
+		$dayofweek = (($dayofweek + 6) % 7) + 1; //Mega Fix of Sundays, as Sundays in php are represented as {0}, and with this fix Sundays will be {7}
+		$breakCount = 0; //var to detect when to use a new line in table, i.e add <td>
+		$lastDayNormal = date("F-Y-d", $end);// gets the last day in normal format fromUnix, ie Jule-2019-31
+		$lastDay = explode("-", $lastDayNormal);//gets the last day in this month, i.e 31
+		$guestX = 0; //iterator to use in $array_allGuests
+		 
+		//building blanks days, it is engaged only in case the 1st day of month(1) is not the first day of the week, i.e not Monday
+		for($i = 1; $i < $dayofweek; $i++) {  //$dayofweek is the 1st week day of the month, i.e 1. 1 means Monday
+			$text.= "<td class='blank'>  </td>"; //Y
+			$breakCount++;
+		}
+		 
+		//building the calendar with free/taken days
+		for($j = 1 /*$dayofweek*/; $j < (int)$lastDay[2]+1 /*count($array_1_Month_days)*/; $j++){  //$lastDay[2]+1 is a quantity of days in this month //$array_1_Month_days-> is an array with booked days in this month, i,e [7,8,9,12,13]
+			//var to detect when to use a new line in table, i.e add <td>
+			if($breakCount%7 == 0) {
+                $text.= "<tr>";
+            }
+			$breakCount++;
+			 
+			if (in_array($j, $array_1_Month_days)) { //if iterator in array $array_1_Month_days, i.e this day is booked
+			    $text.= "<td class='taken iphoneX' onClick='' title='already booked for " . $array_allGuests[$guestX]  ."'>" . $j . "</td>";  //title "booked for Guest name"
+                $guestX++;			   
+			} else {
+				if ($j < 10) {
+                    $v = "0" . $j; //if less than 10, add a zero, ie 09
+                } else {
+                    $v = $j;
+                } 
+				$day = date("Y-m", $start) . "-" . $v; //construct this date in format 2011-12-31, to use in data-dayZ[] in js/booking_cph.js
+				$text.= "<td class='free iphoneX' onClick='' title='start booking' data-dayZ='" . $day . "'> " . $j . "</td>";
+			} 
+		}
+        return $text;
+    }
  
 	
 	
