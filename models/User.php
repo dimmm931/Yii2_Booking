@@ -210,13 +210,7 @@ class User extends ActiveRecord implements IdentityInterface, \yii\filters\RateL
    
    
    
-   
-   //my HasMany
-   public function getTokens()
-   {
-       return $this->hasMany(RestAccessTokens/*AuthAssignment*/::className(), ['r_user' => 'id']); //args=> (model/db name to connect, this model/DB column name => second model/db name id// Db fields which cooherent each other(from 2 DBs)
-   }
-   
+    
    
   
    
@@ -269,6 +263,7 @@ public function removePasswordResetToken()
 //END RESET Password Section, used when u forget your password and claim to RESET IT at Login page---------------------
 
 
-   
- 
+
+
+
 }

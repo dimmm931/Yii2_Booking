@@ -1,14 +1,16 @@
 ## Booking application on Yii2
 
-- <p>A Yii2 application for  end-users to book dates.</p>
+- <p>A Yii2 personal account for end-users to book dates</p>
 - <p>App works on SQL DB, to run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
 - <p>Edit you database name at <b>/config/db.php</b> </p>
-- <p>Then use <b>php yii migrate</b> to migrate databases.
-- <p>To migrate RBAC tables<b>php yii migrate --migrationPath=@yii/rbac/migrations/</b></p>
+- <p>Then use <b>php yii migrate</b> to migrate databases</p>
+- <p>To migrate RBAC tables use command <b>php yii migrate --migrationPath=@yii/rbac/migrations/</b></p>
 - <p> To test on localhost, apart from above you must have PHP installed and  Web server running on your machine </p>
-- <p>You may create a new user or login using login: <b>test</b>, password: <b>testtest</b> after executing the seeding command <b>php yii seed</b></p>
+- <p>You may create a new user or after executing the seeding command <b>php yii seed</b>, login using login: <b>test</b>, password: <b>testtest</b> </p>
 - <p>After login, the user is redirected to personal account, where he can book, view or delete his own dates and view calendar free dates or booked ones (booked by him or other users)</p>
 ## Brief overview of the application
+
+### Loaded by ajax, each month displays amount of free/booked dates.
 
 ![Screenshot](web/images/Screenshots/1.png)
 
@@ -43,6 +45,10 @@
 ### Delete your booked dates, if needed. 
 
 ![Screenshot](web/images/Screenshots/10.png)
+
+### each user's additional control panel. 
+
+![Screenshot](web/images/Screenshots/11.png)
 
 ### Gif video.
 

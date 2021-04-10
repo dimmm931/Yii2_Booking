@@ -5,6 +5,8 @@ namespace app\models\BookingCPH_2_Hotel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use app\models\User;
+
 
 /**
  * This is the model class for table "booking_cph_v2_hotel".
@@ -79,7 +81,15 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
 	
 	
 	
-	
+     /**
+     * hasOne relation
+     * @return 
+     */
+    public function getUserName()
+    {
+        return $this->hasOne(User::className(), ['id' => 'booked_by_user']);
+    }   
+ 	
 	
 	
 		
@@ -340,7 +350,7 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
  //It gets data from SQL for 1 single clicked month and build a calendar 
  
 
- // Methods used in BookingCphController/aactionAjax_get_1_month() ---------------------------------------------------------------------------------------
+    // Methods used in BookingCphController/aactionAjax_get_1_month()-----------------------------------------
  
  
    	/**
@@ -448,6 +458,37 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
     }
  
 	
-	
-	
+    
+    
+   
+     /**
+     * function that 
+	 * @param 
+     * @return 
+     * 
+     */
+    function marginMonthFix($a, $start, $end)
+    {
+      
+		//Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)*********************   
+	    //fix for 1nd margin month, i.e for {28 Aug-31 Aug}  from (28 Aug - 3 Sept) (i.e we take only 28 Aug - 31 Aug) 
+		if ($a->book_to_unix > (int)$end) { //if last booked day UnixStamp in this month is bigger than this month last day UnixStamp (i.e it means that this current loop booking is margin & last date of it ends in the next month )
+		    $startDate = explode("-", $a->book_from); //i.e 2019-07-04 (y-m-d) split to [2019, 07, 04] //$startDate is a first booked day in DB for this month
+			$diff = ((int)$end - $a->book_from_unix )/60/60/24; //i.e This month last day minus this loop DB booked start day
+				
+        } else if ($a->book_from_unix < (int)$start) {    //if 1st booked day UnixStamp in this month is smaller than this month 1st day UnixStamp (i.e it means that this current loop booking is margin & start date of it begun in past month )
+			//fix for 2nd margin month, i.e for {1 Sept-3 Sept}  from (28 Aug - 3 Sept) (i.e we take only 1 Sept - 3 Sept) 
+            $temp = date("Y-m-d", $start); //gets i.e 2019-07-01 (y-m-d), gets from the fist day in this month, i.e 2019-07-01
+			$startDate = explode("-", $temp); //i.e 2019-07-01 (y-m-d) split to [2019, 07, 01] //$startDate is a first day for this month ;
+		    $diff = ($a->book_to_unix - (int)$start)/60/60/24; ////i.e This loop DB booked end day minus This month fisrt day 
+				
+        //if booking is normal, withou margin month, i.e 12 Aug - 25 aug					
+		} else {
+			$startDate = explode("-", $a->book_from); //i.e 2019-07-04 (y-m-d) split to [2019, 07, 04] //$startDate is a first booked day in DB for this month
+			$diff = ( $a->book_to_unix - $a->book_from_unix)/60/60/24; // . "<br>";  //$diff = number of booked days in this month, i.e 17 (end - start)
+		}
+                
+        return $diff;
+    }
+
 }

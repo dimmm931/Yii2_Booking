@@ -5,7 +5,8 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
 
-   
+    'timeZone' => 'UTC',    
+    
     //my Module
     'modules' => [
         'admin' => [
