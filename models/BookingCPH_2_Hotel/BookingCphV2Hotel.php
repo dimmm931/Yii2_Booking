@@ -7,7 +7,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use app\models\User;
 
-
 /**
  * This is the model class for table "booking_cph_v2_hotel".
  *
@@ -31,8 +30,6 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
         return 'booking_cph_v2_hotel';
     }
 
-
-    
     public function behaviors()
     {
         return [
@@ -44,7 +41,6 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
             ],
         ];
     }
-    
     
     /**
      * @inheritdoc
@@ -79,9 +75,7 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
         ];
     }
 	
-	
-	
-     /**
+    /**
      * hasOne relation
      * @return 
      */
@@ -91,68 +85,45 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
     }   
  	
 	
-	
-		
-//your custom validation rule, checks if start/end time is not PAST, and if Start in Unix in smaller than End in Unix. Used in model in function rules()
-// **************************************************************************************
-// **************************************************************************************
-//                                                                                     **	
+	 /**
+     * your custom validation rule, checks if start/end time is not PAST, and if Start in Unix in smaller than End in Unix. Used in model in function rules()
+     *
+     * @return 
+     */	
+
 	public function validateDatesX(){
         if(strtotime($this->book_from) <= date("U")){//if start date is Past //  date("U") is a today in UnixTime
-            $this->addError('book_from','Can"t be past!!! Please give correct Start Day');
+            $this->addError('book_from', 'Can"t be past!!! Please give correct Start Day');
         }
 		
-		 if(strtotime($this->book_to) <= date("U")){//if End date is Past 
+		if(strtotime($this->book_to) <= date("U")){//if End date is Past 
             $this->addError('book_to','Can"t be past!!! Please give correct End Day');
         }
 		
-		 if(strtotime($this->book_to) <= strtotime($this->book_from)){ //if Start Unix Time bigger then End
+		if(strtotime($this->book_to) <= strtotime($this->book_from)){ //if Start Unix Time bigger then End
             $this->addError('book_from','Dates range is reversed!!!!! Check start/end dates.');
 			$this->addError('book_to',  'Dates range is reversed!!!!! Check start/end dates.');
         }
     }
-	
-// **                                                                                  **
-// **************************************************************************************
-// **************************************************************************************
 
-
-
-
-	
-	
-//beforeSave(); //convert date to unixTime & assign to SQL db field
-// **************************************************************************************
-// **************************************************************************************
-//                                                                                     **
-
-  //WORKS!!!!!!!!!!!!!!!!!!!! (wasn't  working  because  used $_POST['Mydbstart']['mydb_v_am'] instead of  $this->mydb_v_am )
-  public function beforeSave($insert)  //$insert
-  {
-    if (parent::beforeSave(false)) {
- 
-        // Place your custom code here
-		
-        // $model = new Mydbstart(); // Instead of creating a New Model - u have to use {$this};
-        //NEW
-        //$curr = self::findByPk($this->id); //::find()->orderBy ('mydb_id DESC')  ->all(); //WON't  work  we  don't  needd  getting  old  value  from SQL
-        //END NEW
-		
-             if (!empty($this->book_from) && !empty($this->book_to )){ 
-                 $this->book_from_unix = strtotime($this->book_from);  //convert date to unixTime & assign to SQL db field
-				 $this->book_to_unix = strtotime($this->book_to);  //convert date to unix & assign to SQL db field
-             }// END if(!empty($this->mydb_v_am)) 
-                 
-   
-        // End  Place your custom code her
-        return true;
-    } else {
-        return false;
-    }
-  } // END BEFORESAVE();
-// **                                                                                  **
-// **************************************************************************************
-// **************************************************************************************
+  
+    /**
+     * beforeSave() convert date to unixTime & assign to SQL db field
+     *
+     * @return boolean
+     */
+    public function beforeSave($insert)  //$insert
+    {
+        if (parent::beforeSave(false)) {
+            if (!empty($this->book_from) && !empty($this->book_to )){ 
+                $this->book_from_unix = strtotime($this->book_from);  //convert date to unixTime & assign to SQL db field
+				$this->book_to_unix   = strtotime($this->book_to);  //convert date to unix & assign to SQL db field
+            } 
+            return true;
+        } else {
+            return false;
+        }
+    } 
 
 
 
@@ -462,25 +433,27 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
     
    
      /**
-     * function that 
-	 * @param 
-     * @return 
+     * function that fix month margin, when booking include margin months, i.e 28 Aug - 3 Sept
+	 * @param object $a ($a is a foreach iterator)
+     * @param string $start, ($_POST['serverFirstDayUnix'], var is from ajax, 1st day of the selected month in Unix)
+     * @param string $end,   ($_POST['serverLastDayUnix'], var is from ajax, last day of the selected month in Unix)
+     * @return array
      * 
      */
     function marginMonthFix($a, $start, $end)
     {
       
-		//Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)*********************   
+        //Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)*********************   
 	    //fix for 1nd margin month, i.e for {28 Aug-31 Aug}  from (28 Aug - 3 Sept) (i.e we take only 28 Aug - 31 Aug) 
-		if ($a->book_to_unix > (int)$end) { //if last booked day UnixStamp in this month is bigger than this month last day UnixStamp (i.e it means that this current loop booking is margin & last date of it ends in the next month )
-		    $startDate = explode("-", $a->book_from); //i.e 2019-07-04 (y-m-d) split to [2019, 07, 04] //$startDate is a first booked day in DB for this month
-			$diff = ((int)$end - $a->book_from_unix )/60/60/24; //i.e This month last day minus this loop DB booked start day
+		if ($a->book_to_unix > (int)$_POST['serverLastDayUnix']) { //if last booked day UnixStamp in this month is bigger than this month last day UnixStamp (i.e it means that this current loop booking is margin & last date of it ends in the next month )
+			$startDate = explode("-", $a->book_from); //i.e 2019-07-04 (y-m-d) split to [2019, 07, 04] //$startDate is a first booked day in DB for this month
+			$diff = ((int)$_POST['serverLastDayUnix'] - $a->book_from_unix )/60/60/24; //i.e This month last day minus this loop DB booked start day
 				
-        } else if ($a->book_from_unix < (int)$start) {    //if 1st booked day UnixStamp in this month is smaller than this month 1st day UnixStamp (i.e it means that this current loop booking is margin & start date of it begun in past month )
+        } else if ($a->book_from_unix < (int)$_POST['serverFirstDayUnix']) {    //if 1st booked day UnixStamp in this month is smaller than this month 1st day UnixStamp (i.e it means that this current loop booking is margin & start date of it begun in past month )
 			//fix for 2nd margin month, i.e for {1 Sept-3 Sept}  from (28 Aug - 3 Sept) (i.e we take only 1 Sept - 3 Sept) 
-            $temp = date("Y-m-d", $start); //gets i.e 2019-07-01 (y-m-d), gets from the fist day in this month, i.e 2019-07-01
+            $temp = date("Y-m-d", $_POST['serverFirstDayUnix']); //gets i.e 2019-07-01 (y-m-d), gets from the fist day in this month, i.e 2019-07-01
 			$startDate = explode("-", $temp); //i.e 2019-07-01 (y-m-d) split to [2019, 07, 01] //$startDate is a first day for this month ;
-		    $diff = ($a->book_to_unix - (int)$start)/60/60/24; ////i.e This loop DB booked end day minus This month fisrt day 
+		    $diff = ($a->book_to_unix - (int)$_POST['serverFirstDayUnix'])/60/60/24; ////i.e This loop DB booked end day minus This month fisrt day 
 				
         //if booking is normal, withou margin month, i.e 12 Aug - 25 aug					
 		} else {
@@ -488,7 +461,7 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
 			$diff = ( $a->book_to_unix - $a->book_from_unix)/60/60/24; // . "<br>";  //$diff = number of booked days in this month, i.e 17 (end - start)
 		}
                 
-        return $diff;
+        return array('difference'=> $diff, 'startDateX'=> $startDate );
     }
 
 }

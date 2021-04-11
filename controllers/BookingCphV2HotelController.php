@@ -153,9 +153,9 @@ class BookingCphV2HotelController extends Controller
         $model = new BookingCphV2Hotel(); 
 	    //date_default_timezone_set('UTC');  //use ('UTC') to avoid -1 day result    //('europe/kiev')	('UTC')
 	    error_reporting(E_ALL & ~E_NOTICE); //JUST TO FIX 000wen HOSTING, Hosting wants this only for Ajax Actions!!!!!!!!!!!!!!!
-	    $array_All_Month = array();//will store all 6 month data
-	    $array_All_Unix = array();//will store all Unix start & stop time for all 6 month, will be in format [[CurrentStart, Currentend], [start-1, end-1], [start-2, end-2]]
-        $array_All_sqlData = array();//will store all sql results
+	    $array_All_Month = array();    //will store all 6 month data
+	    $array_All_Unix = array();     //will store all Unix start & stop time for all 6 month, will be in format [[CurrentStart, Currentend], [start-1, end-1], [start-2, end-2]]
+        $array_All_sqlData = array();  //will store all sql results
 	    $array_All_CountDays = array();//will store counts of booked days for every month (for badges)
 	   	   
 	    $nextMonthQuantity = 9;
@@ -212,7 +212,7 @@ class BookingCphV2HotelController extends Controller
 		$text; //will contain the whole result
 		 
 		$start = (int)$_POST['serverFirstDayUnix']; //1561939200 - 1st July;  //var is from ajax, 1st day of the month in Unix 
-		$end = (int)$_POST['serverLastDayUnix']; //1564531200 - 31 July; //var is from ajax, the last day in this month, i.e amount of days in this month, i.e 31
+		$end   = (int)$_POST['serverLastDayUnix']; //1564531200 - 31 July; //var is from ajax, the last day in this month, i.e amount of days in this month, i.e 31
 	
 		$text = "<br><br><br><br><div><h2>" .date("F-Y", $start) . "</h2> <p><span class='example-taken'></span> - means booked dates</p></div><br>"; //header: month-year //returns July 2019 + color sample explain
 		$text.="<table class='table table-bordered'>";
@@ -243,10 +243,13 @@ class BookingCphV2HotelController extends Controller
 		//complete $array_1_Month_days with booked days in this month, i,e [7,8,9,12,13]
 		if ($thisMonthData) {
             
-           
 		    foreach ($thisMonthData as $a) {
                 
-                $diff = $model->marginMonthFix($a, $start, $end);
+                //Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)  
+                $fixMargins = $model->marginMonthFix($a, $start, $end);
+                $diff      = $fixMargins['difference']; 
+                $startDate = $fixMargins['startDateX'];
+                
                 /*
 			    //Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)*********************   
 			    //fix for 1nd margin month, i.e for {28 Aug-31 Aug}  from (28 Aug - 3 Sept) (i.e we take only 28 Aug - 31 Aug) 
@@ -272,7 +275,7 @@ class BookingCphV2HotelController extends Controller
 			    for ($i = 0; $i < $diff+1; $i++) {
 			        $d = (int)$startDate[2]++; //(int) is used to remove 0 if any, then do ++
 			        array_push($array_1_Month_days, $d ); //adds to array booked days, i.e [7,8,9,12,13]
-				    array_push/*array_unshift*/($array_allGuests, $a->booked_guest); //adds to array a guest name to display as titile in calnedar on hover //use array_unshift() to add to begging(not end) of array
+				    array_push($array_allGuests, $a->booked_guest); //adds to array a guest name to display as titile in calnedar on hover //use array_unshift() to add to begging(not end) of array
 		        } 
 		    }
             
@@ -280,6 +283,7 @@ class BookingCphV2HotelController extends Controller
 		
         //START BUILDING A CALENDAR
         $calendarText = $model->buildCalendar($start, $end, $array_1_Month_days, $array_allGuests); 
+        
         $text = $text . $calendarText;
 		$text.= "</table><hr><hr>" . $generalBookingInfo; // . "<h4>Booked days array=>" . implode("-", $array_1_Month_days) ."</h4>"; // just to display array with booked days, i.e [4,5,6,18,19]
 		return $text;
