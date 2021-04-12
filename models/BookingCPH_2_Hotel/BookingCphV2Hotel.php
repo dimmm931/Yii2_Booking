@@ -129,95 +129,78 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
 
 
 
-
-
-
-
-
- /**
-  * Method description
-  *
-  * @return mixed The return value
-  */
-// **************************************************************************************
-// **************************************************************************************
-//                                                                                     **
- public function beforeValidate()
- {
-     //$this->book_from
-	 
-     return parent::beforeValidate();
- }
+   /**
+    * Method description
+    *
+    * @return mixed 
+    */
+    public function beforeValidate()
+    {
+        //$this->book_from
+        return parent::beforeValidate();
+    }
  
  
- 
- 
+   /**
+    * Method gets next 9 months list & adds it to array $array_All_Month, i.e $array_All_Month = ["Nov 2019", "Dec 2019", etc] 
+    * @param int $i, foreach iterator
+    * @return array of strings
+    */
+    function get_All_Next_Months_List($i)
+    { 
+		//$array_All_Month = array();//will store all 6 month data
+		//Start DATE for NEXT months  ONLY (+ this current month in first iteration)
+        $PrevMonth = date('M', strtotime(date('Y-m'). " + " .$i. " month")); //i.e Jul  //$PrevMonth=date('M', strtotime(date('Y-m')." -1 month"));         
+        $PrevYear  =  date('Y', strtotime(date('Y-m')." + " .$i. " month"));  //i.e 2019 // $PrevYear=date('Y', strtotime(date('Y-m')." -1 month"));// getting Next  month  and  year;
+		$b         = $PrevMonth . " " . $PrevYear; //i.e Jul 2019
+		//array_push($array_All_Month, ${'current'.$i}); //adds next months to array in a loop
+		return array($b, $PrevMonth) ; //$b=>"Nov 2019"   //$PrevMonth=> "Jun"
+	}
+	 
+	 
+	 
+	 
+	 
+	 
 
- 
- 
-   
- // **************************************************************************************
- // **************************************************************************************
- //                                                                                     **
-     function get_All_Next_Months_List($i){ //pass {$i} as arg is a must
-		    //$array_All_Month = array();//will store all 6 month data
-		    //Start DATE for NEXT months  ONLY (+ this current month in first iteration)----------------------------
-            $PrevMonth = date('M', strtotime(date('Y-m'). " + " .$i. " month")); //i.e Jul  //$PrevMonth=date('M', strtotime(date('Y-m')." -1 month"));         
-            $PrevYear =  date('Y', strtotime(date('Y-m')." + " .$i. " month"));  //i.e 2019 // $PrevYear=date('Y', strtotime(date('Y-m')." -1 month"));// getting Next  month  and  year;
-        
-		    /*${'current'.$i}*/ $b = $PrevMonth . " " . $PrevYear; //i.e Jul 2019
-			//array_push($array_All_Month, ${'current'.$i}); //adds next months to array in a loop
-			return array($b, $PrevMonth) ; //$b=>"Nov 2019"   //$PrevMonth=> "Jun"
-	 }
-	 
-	 
-	 
-	 
-	 
-	 
-	 
- // **************************************************************************************
- // **************************************************************************************
- //                                                                                     **
     /**
      * Method corrects the year in case when building 6 months content (current month + 5 next) in a loop and if current month is Nov or Dec 202x, so in this case January must be next year (i.e 202x + 1).
      * @param string $PrevMonth, e.g $PrevMonth = 'Jan'; (date("M") returns short textual representation of a month (three letters))
      * @param integer $iterator, current for() loop iterator
      * @return array('may'=> $integer $may, 'yearX'=> string $yearX). Example array('may'=> 1, 'yearX'=> '2021')
      */
-    function correctYear($PrevMonth, $iterator){
-		 //var with year, used for creating Unix for next years, must be declared out of for loop, to save its value for further iteration, in case if($may == 1 )
-		 $MonthList= array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"); //General array for all click actions
+    function correctYear($PrevMonth, $iterator)
+    {
+		//var with year, used for creating Unix for next years, must be declared out of for loop, to save its value for further iteration, in case if($may == 1 )
+		$MonthList= array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"); //General array for all click actions
+		static $y = 0;  //Mega Fix, cast static type to ++ next year. Don't need this fix in old procedure version as $year there is global
 		 
-		 static $y = 0;  //Mega Fix, cast static type to ++ next year. Don't need this fix in old procedure version as $year there is global
-		 
-		 
-		 $yearX = date("Y"); //gets the current year (string), i.e '2019'
-	     $may =  array_search($PrevMonth , $MonthList); //search the index of $PrevMonth  in array, i.e index of Jul = 6
-		 $may = $may + 1;
+		$yearX = date("Y"); //gets the current year (string), i.e '2019'
+	    $may =  array_search($PrevMonth , $MonthList); //search the index of $PrevMonth  in array, i.e index of Jul = 6
+		$may = $may + 1;
 			
-		 //if current month in loop is 1 (i.e January), for this & next months we use the next year. Example: current month is Nov or Dec 202x, so January must be next year (i.e 202x + 1).
-		 //As it is loop, January here could NOT BE EVER here the current month, if($may == 1 ) it can only be the next or next+1, etc, so the current is always the past year & January is the next	
-		 if ($may == 1 && $i > 0) { //mega fix 2021, line was => if ($may == 1 ) and when cureent month was 1, i.e January, this function generated the next year for cureent month and next 5
-			 $y++;
-		     //$yearX must be declared out of for loop, to save its value for further iteration, in case if($may == 1 )
+		//if current month in loop is 1 (i.e January), for this & next months we use the next year. Example: current month is Nov or Dec 202x, so January must be next year (i.e 202x + 1).
+		//As it is loop, January here could NOT BE EVER here the current month, if($may == 1 ) it can only be the next or next+1, etc, so the current is always the past year & January is the next	
+		if ($may == 1 && $i > 0) { //mega fix 2021, line was => if ($may == 1 ) and when cureent month was 1, i.e January, this function generated the next year for cureent month and next 5
+			$y++;
+		    //$yearX must be declared out of for loop, to save its value for further iteration, in case if($may == 1 )
 		    // $yearX++ ; //was = (int)date("Y") + 1; Fix for unlimited future years// gets the current year & adds +1 to get the next year, ie. 2019 + 1 = 2020
-			 //$yearX = (string)$yearX;
-			
-		 }
+		}
 		 
-		 $yearX = $yearX + $y; //encrease year
-		 return array('may'=> $may, 'yearX'=> $yearX); //
+		$yearX = $yearX + $y; //encrease year
+		return array('may'=> $may, 'yearX'=> $yearX); //
 	}
  
  
  
  
- 
- // **************************************************************************************
- // **************************************************************************************
- //                                                                                     **
-     function get_Next_Months_Unix($may, $yearX){
+    /**
+     * Method gets next 9 months UnixTime & adds it to array $array_All_Unix, i.e $array_All_Unix =[[CurrentStart, Currentend], [start-1, end-1], [start-2, end-2]]
+     * @param int $may, current month
+     * @param string $yearX, current year
+     * @return array('array_tempo'=> [1556654400,1559246400], 'first1'=> "2019-05-01", 'last1'=> "2019-05-31")
+     */
+    function get_Next_Months_Unix($may, $yearX){
 		 $first1 = date("Y-m-d", mktime(0, 0, 0, $may , 1 ,$yearX)); //gets the first day of the current month, returns  "2019-05-01"
 		 $last1 = date("Y-m-d",  mktime(0, 0, 0, $may+1, 0, $yearX)); //gets the last day of the current month,returns "2019-05-31"
 			
@@ -228,114 +211,94 @@ class BookingCphV2Hotel extends \yii\db\ActiveRecord
 	 }
  
  
- 
 
- // **************************************************************************************
- // **************************************************************************************
- //                                                                                     **
- 
-    function findBooked_Dates_In_Month($i, $first1, $last1, $postD ){ 
+    /**
+     * Method gets next 9 months booked dates info & adds them to array $array_All_sqlData, i.e $array_All_sqlData = [[{book_id: 55, booked_by_user: "Dima", book_from: "2019-12-27", book_to: "2019-12-28"], [], []];
+     * @param int $i (iterator)
+     * @param string first1 
+     * @param string $last1
+     * @param string $postD ($_POST['serverRoomId'])
+     * @return collection of objects
+     */
+    function findBooked_Dates_In_Month($i, $first1, $last1, $postD){ 
 		//Find SQL data for a specific NEXT month (+ this current month in first iteration) (from 6-months range) one by one in a loop
-         //creating array {SmonthData1,SmonthData2,}
-         /*${'monthData'.$i}*/ $m = /*BookingCphV2Hotel*/self::find() //->  orderBy ('book_id DESC')  /*->limit('5')*/ 
-	            // ->where([ 'booked_by_user' => Yii::$app->user->identity->username , /*'mydb_id'=>1*/ ]) //if this line uncommented, each user has its own private booking(many users-> each user has own private booking appartment, other users cannot book it). Comment this if u want that booking is general, ie many users->one booking appartment(many users can book 1 general appartment)  
-			     ->andWhere( 'book_room_id =:status', [':status' => $postD] ) //room ID $postD //   
-				 ->andWhere([ 'or',
+        $m = self::find() 
+			    ->andWhere( 'book_room_id =:status', [':status' => $postD] )   
+				->andWhere([ 'or',
 				             ['between', 'book_from_unix', strtotime($first1), strtotime($last1) ],
 							 ['between', 'book_to_unix',   strtotime($first1), strtotime($last1) ] ])
 				  //->andWhere(['between', 'book_from_unix', strtotime($first1), strtotime($last1) ])   /*->andFilterWhere(['like', 'supp_date', $PrevMonth])  ->andFilterWhere(['like', 'supp_date', $PrevYear])*/    
 			      // ->orWhere (['between', 'book_to_unix',   strtotime($first1), strtotime($last1) ])  //(MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept) //strtotime("12-Aug-2019") returns unixstamp
-				 ->all(); 
+				->all(); 
 				 
-				 
-			
 		return $m; //${'monthData'.$i};	  
-          //array_push($array_All_sqlData, ${'monthData'.$i}); //adds current month booking data to array $array_All_sqlData
-		  //END DATE for Previous month  ONLY (+ this current month in first iteration)-------------------------------
 	}
 	
 	
+
+     /**
+     * Method count the quantity of booked days for every next 9 months & adds them to array $array_All_CountDays, i.e $array_All_CountDays = [0,2,4,0]
+     * @param collection of objects $monthData (sqlResult)
+     * @param string $first1 (the first day of the current month, i.e"2019-05-01")
+     * @param string $last1  (the last day of the current month)
+     * @return array (1, '30')
+     */
 	
-	
- // **************************************************************************************
- // **************************************************************************************
- //                                                                                     **
-	
-	function getCount_OfBooked_Days_For_Badges_and_FixMargins($monthData, $first1, $last1){ //$last1 => "2020-01-31"
-	        //Badges:count amount of booked days for for a specific NEXT month (from 6-months range) (+ this current month in first iteration) one by one in a loop. Unix book_to_unix & book_from_unix are from DB results
-		    $countX = 0;
-		    foreach ($monthData/*${'monthData'.$i}*/ as $a){
+	function getCount_OfBooked_Days_For_Badges_and_FixMargins($monthData, $first1, $last1){ 
+	    //Badges:count amount of booked days for for a specific NEXT month (from 6-months range) (+ this current month in first iteration) one by one in a loop. Unix book_to_unix & book_from_unix are from DB results
+		$countX = 0;
+		foreach ($monthData as $a){
 				
-				//Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)*********************   
-				//fix for 1nd margin month, i.e for {28 Aug-31 Aug}  from (28 Aug - 3 Sept) (i.e we take only 28 Aug - 31 Aug) 
-				if($a->book_to_unix > strtotime($last1)){ //if last booked day UnixStamp in this month is bigger than this month last day UnixStamp (i.e it means that this current loop booking is margin & last date of it ends in the next month )
-				    $number = (strtotime($last1) - $a->book_from_unix )/60/60/24; //i.e This month last day minus this loop DB booked start day
-				}
+			//Start MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)*********************   
+			//fix for 1nd margin month, i.e for {28 Aug-31 Aug}  from (28 Aug - 3 Sept) (i.e we take only 28 Aug - 31 Aug) 
+			if($a->book_to_unix > strtotime($last1)){ //if last booked day UnixStamp in this month is bigger than this month last day UnixStamp (i.e it means that this current loop booking is margin & last date of it ends in the next month )
+				$number = (strtotime($last1) - $a->book_from_unix )/60/60/24; //i.e This month last day minus this loop DB booked start day
+		    }
 				
-				//fix for 2nd margin month, i.e for {1 Sept-3 Sept}  from (28 Aug - 3 Sept) (i.e we take only 1 Sept - 3 Sept) 
-				 else if($a->book_from_unix < strtotime($first1)){    //if 1st booked day UnixStamp in this month is smaller than this month 1st day UnixStamp (i.e it means that this current loop booking is margin & start date of it begun in past month )
-			         $number = ($a->book_to_unix - strtotime($first1))/60/60/24; //i.e This loop DB booked end day minus This month first day 
+			//fix for 2nd margin month, i.e for {1 Sept-3 Sept}  from (28 Aug - 3 Sept) (i.e we take only 1 Sept - 3 Sept) 
+			else if($a->book_from_unix < strtotime($first1)){    //if 1st booked day UnixStamp in this month is smaller than this month 1st day UnixStamp (i.e it means that this current loop booking is margin & start date of it begun in past month )
+			    $number = ($a->book_to_unix - strtotime($first1))/60/60/24; //i.e This loop DB booked end day minus This month first day 
 					
-                 //if booking is normal, without margin month, i.e 12 Aug - 25 aug					
-				 } else {
-		             $number = ($a->book_to_unix - $a->book_from_unix)/60/60/24;
-				  } 
-				//END MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)********************* 
+            //if booking is normal, without margin month, i.e 12 Aug - 25 aug					
+		    } else {
+		        $number = ($a->book_to_unix - $a->book_from_unix)/60/60/24;
+			} 
+			//END MARGIN MONTHS fix, when booking include margin months, i.e 28 Aug - 3 Sept)********************* 
 				
-				
-				
-				 $number = $number + 1; //if u want to count from 5 aug to 6 aug as 2 days , not as one 
-		         //$from = strtotime($last); $to = strtotime($first); $diff = $from - $to;   $countX = $diff;///60/60/24;
-			     $countX = $countX + $number; //sum all booked days
-		     }
+			$number = $number + 1; //if u want to count from 5 aug to 6 aug as 2 days , not as one 
+			$countX = $countX + $number; //sum all booked days
+		}
 			
-			//getting the amount of days in this month, i.e the last day in this month
-		     $lastDay = explode("-", $last1);// $last1 => "2020-01-31"
-			 $daysInThisMonth = $lastDay[2] ; //gets the last day in this month, i.e 31 
+		//getting the amount of days in this month, i.e the last day in this month
+		$lastDay = explode("-", $last1);// $last1 => "2020-01-31"
+		$daysInThisMonth = $lastDay[2] ; //gets the last day in this month, i.e 31 
 	
-			return array($countX, $daysInThisMonth); //(amount of booked days in this month, all amount of days in this month)
-		    //array_push($array_All_CountDays, $countX); //adds this current month booked days (in numbers, i.e 22) to array 
-		   //END count amount of booked days for for a specific next month one by one in a loop. Unix from & to are from DB results	
+		return array($countX, $daysInThisMonth); //(amount of booked days in this month, all amount of days in this month)
 	}
-	
-	
-	
-	
-	
-	
+		
  
- // END Methods used in BookingCphController/actionAjax_get_6_month()--------------------------------------------------------------------------------------
+    // END Methods used in BookingCphController/actionAjax_get_6_month()--------------------------------------------------------------------------------------
 
 
 
  
  
- 
- 
- 
- 
- 
- 
 
- // Methods used in BookingCphController/actionAjax_get_1_month(). ---------------------------------------------------------------------------------------
- //It gets data from SQL for 1 single clicked month and build a calendar 
- 
-
-    // Methods used in BookingCphController/aactionAjax_get_1_month()-----------------------------------------
- 
+    // Methods used in BookingCphController/actionAjax_get_1_month(). ---------------------------------------------------------------------------------------
+    //It gets data from SQL for 1 single clicked month and build a calendar 
  
    	/**
      * function that builds Guests List for this one month, completes $array_1_Month_days with booked days in this month, i,e [7,8,9,12,13]
 	 * @param collection of obejcts $thisMonthDataList
-     * @param int||string $overallBookedDays
+     * @param int $start, (int)$_POST['serverFirstDayUnix']; //1561939200
      * @return string $generalBookingInfo
      * 
      */
-   function buildThisMonthBookedDaysList($thisMonthDataList)
+   function buildThisMonthBookedDaysList($thisMonthDataList, $start)
    {
         $overallBookedDays; //all amount of days booked in this month
 
-       //guest list for $generalBookingInf //Forming here column names(like <TH>) for $guestList table, i.e(guest/start/end/duration/delete)
+        //guest list for $generalBookingInf //Forming here column names(like <TH>) for $guestList table, i.e(guest/start/end/duration/delete)
 		$guestList = "<div class='col-sm-12 col-xs-12 border guestList'>" . 
 		             "<div class='col-sm-3 col-xs-2 bg-primary colX'>Guest </div>" . 
 		             "<div class='col-sm-3 col-xs-3 bg-primary colX'>From  </div>" . 

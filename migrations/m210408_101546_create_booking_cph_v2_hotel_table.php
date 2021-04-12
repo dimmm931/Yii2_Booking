@@ -27,6 +27,16 @@ class m210408_101546_create_booking_cph_v2_hotel_table extends Migration
             'updatedAt'          => $this->timestamp(),
 
         ]);
+        
+        // add foreign key for table `user`
+        $this->addForeignKey(
+            'fk-post-booked_by_user',
+            'booking_cph_v2_hotel', //tb
+            'booked_by_user',
+            'user',
+            'id',
+            'CASCADE'
+        );
     }
 
     /**

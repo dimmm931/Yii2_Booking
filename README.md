@@ -1,6 +1,6 @@
 ## Booking application on Yii2
 
-- <p>A Yii2 personal account for end-users to book dates</p>
+- <p>A Yii2 application for end-users to book dates</p>
 - <p>App works on SQL DB, to run the application on <b>http://localhost</b>, copy the repository code and run <b>composer install</b> to load all dependencies. </p>
 - <p>Edit you database name at <b>/config/db.php</b> </p>
 - <p>Then use <b>php yii migrate</b> to migrate databases</p>

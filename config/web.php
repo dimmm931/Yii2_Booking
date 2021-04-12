@@ -1,21 +1,15 @@
 <?php
-
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
-
 $config = [
-
     'timeZone' => 'UTC',    
-    
+   
     //my Module
     'modules' => [
         'admin' => [
             'class' => 'app\modules\admin\Resttt',
         ],
     ],
-	
-	
-	
 	
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
@@ -29,25 +23,17 @@ $config = [
 	
 	//Components
     'components' => [
-	
         'request' => [
-			
               // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
               'cookieValidationKey' => 'fdgeggdfgb54654645t',
-			  
-			//'baseUrl'=> '',
-            
         ],
 		
-		
-		//mine JSON---------------------------------------------------------------
+		//mine JSON------
 		'response' => [
            //'format' => \yii\web\Response::FORMAT_JSON, //GIVES OUT JSON!!!!!!!!!!!!
         ],
 		
-		
-	
-        //Set my RBAC-----------------
+        //Set my RBAC-------
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
@@ -60,8 +46,7 @@ $config = [
             'enableAutoLogin' => true,
 			'identityCookie' => ['name' => '2f_dimmm931'], //Two Yii2 application Login Conflict mega Fix
         ],
-		//END Set my RBAC---------------
-		
+		//END Set my RBAC----
 		
 		
 		//setting error handler
@@ -69,10 +54,9 @@ $config = [
             'errorAction' => 'site/error', //'errorAction' => 'site/error-not-used',  //decoment last, if you you want to use your errof handler 
         ],
 		
-		
 		//Set multilanguages---------------
 		// set target language to be Russian
-        'language' => 'ru-RU', //looks like not obligatory, I added new 'my-Lang', withuot adding it to config
+        'language' => 'ru-RU', //looks like not obligatory, I added new 'my-Lang', without adding it to config
         // set source language to be English
         'sourceLanguage' => 'en-US',
 		
@@ -91,18 +75,6 @@ $config = [
           ],
         ],
 		//END Set multilanguages------------
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		//E-MAIL settings
@@ -124,7 +96,6 @@ $config = [
 		 //END E-MAIL settings
 			
 			
-			
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -144,12 +115,12 @@ $config = [
             'showScriptName'  => false,  // Hide index.php
 			//'class' => 'yii\web\UrlManager',
             'rules' => [
-                 //'booking'               => 'booking-cph-v2-hotel/index',
+                 'booking'               => 'booking-cph-v2-hotel/index',
 			     'rbac-management-table' => 'site/rbac', //pretty url for 1 action(if Yii sees 'site/rbac' it turn it to custom text)
 			     'about-me'              => 'site/about',            //pretty url for 1 action(if Yii sees 'site/about' it turn it to custom text)
 				 //Rules for REST API
 			     ['class' => 'yii\rest\UrlRule', 'controller' => ['rest'],  ], //rule for rest api, means if Yii sees any action of RestController, it uses yii\rest\UrlRule 
-				     //['extraPatterns' => ['GET /' => 'new'], /*'pluralize' => false*/ ], 
+				 //['extraPatterns' => ['GET /' => 'new'], /*'pluralize' => false*/ ], 
 				 //Rules for pretty URL with regExp
 				 '<controller:\w+>/<id:\d+>' => '<controller>/view',  //for others, turns {site/about?vies=14} to {}
 				  '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
@@ -158,11 +129,6 @@ $config = [
             ],
         ], 
         //END PRETTY URL
-		
-		
-
-	
-		
 		
     ],
 	//END COMPONENTS
@@ -179,8 +145,6 @@ $config = [
 		   }
 	   }
     },
-	//create return Url
-	
 	
 ]; //end config
 
