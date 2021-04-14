@@ -46,7 +46,7 @@
 
 ![Screenshot](web/images/Screenshots/10.png)
 
-### each user's additional control panel. 
+### Additional control panel. 
 
 ![Screenshot](web/images/Screenshots/11.png)
 
