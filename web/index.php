@@ -7,8 +7,8 @@ error_reporting(E_NOTICE);
 //Eneable development mode on Local host only
 if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') {
     // comment out the following two lines when deployed to production (only if u dont use above line if($_SERVER['REMOTE_ADDR'] == '127.0.0.1') { })
-    defined('YII_DEBUG') or define('YII_DEBUG', true);
-    defined('YII_ENV') or define('YII_ENV', 'dev');
+    //defined('YII_DEBUG') or define('YII_DEBUG', true);
+    //defined('YII_ENV') or define('YII_ENV', 'dev');
 }
 
 //define('YII_ENABLE_ERROR_HANDLER', true);//mine. To show my personal error handler
