@@ -3,34 +3,22 @@
 $(document).ready(function(){
 	var clickedThis; //global var with $this ($this of clicked on a single month among 6 month )
 
-   
-	
-	
-		
 	 //clicking on any room
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
 	
-	 $(document).on("click", '.subfolder', function(event) {      //for newly generated 
-	     
-		  event.preventDefault(); //not to react to <a href>
-		  
-		  $(".single-clicked-month").html(''); //hide calendar if was activated prev
-	 
-	      //clickedThis = this; //to use in fucntion that deletes  a booking and needs to renew the view
-		  //alert(this.id); // thisObjZ.attr("id"); //get the clicked id;
-		  addRemoveClass($(this));
-		 
-		  var roomX = "Room " + this.id;
-		  $("#roomNumber").stop().fadeOut("slow",function(){ $(this).html(roomX)}).fadeIn(2000);
-		  if(screen.width <= 640){ //mobile only
-		      scrollResults("#roomNumber", ".parent()."); //advanced scroll, scrolls to div with form //arg(DivID, levels to go up from DivID)
-		  }
-		  get_6_month(this.id);
-		  
+	$(document).on("click", '.subfolder', function(event) {      //for newly generated 
+		event.preventDefault(); //not to react to <a href>
+		$(".single-clicked-month").html(''); //hide calendar if was activated prev
+		addRemoveClass($(this));
+		var roomX = "Room " + this.id;
+		$("#roomNumber").stop().fadeOut("slow",function(){ $(this).html(roomX)}).fadeIn(2000);
+		if(screen.width <= 640){ //mobile only
+		    scrollResults("#roomNumber", ".parent()."); //advanced scroll, scrolls to div with form //arg(DivID, levels to go up from DivID)
+		}
+		get_6_month(this.id);  
 	 });
-	
 	
 	// **                                                                                  **
     // **************************************************************************************
@@ -40,32 +28,26 @@ $(document).ready(function(){
 	
 	
 	
-	 //clicking on any 1 one single  month (any of 6 month)
+	//clicking on any 1 one single  month (any of 6 month)
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
 	
-	 $(document).on("click", '.my-month', function() {      //for newly generated 
-	 
-	      clickedThis = this; //to use in fucntion that deletes  a booking and needs to renew the view
-		  get_1_single_month(this); //pass this to get this attributes
+	$(document).on("click", '.my-month', function() {      //for newly generated 
+	    clickedThis = this; //to use in fucntion that deletes  a booking and needs to renew the view
+		get_1_single_month(this); //pass this to get this attributes
 		  
-		  //Scroll to results in Mobile only
-		  /*if(screen.width <= 640){ 
-	           scrollResults(".single-clicked-month"); //scroll to div
-		  }*/
-		  
-	 });
-	
+		//Scroll to results in Mobile only
+		/*if(screen.width <= 640){ 
+	        scrollResults(".single-clicked-month"); //scroll to div
+		}*/
+	});
 	
 	// **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************
 	
-	
-	
-	
-	
+
 	
 	
 	//function that draw 6 month with badges //onLoad sends ajax request to BookingCphControler->function actionAjax_get_6_month()
@@ -73,15 +55,14 @@ $(document).ready(function(){
     // **************************************************************************************
     //                                                                                     ** 
 	function get_6_month(idX){ 
-		$(".loader").show(200); //show the loader
+        $(".loader").show(200); //show the loader
 		
-		//getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
+	    //getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
         var loc = window.location.pathname;
         var dir = loc.substring(0, loc.lastIndexOf('/'));
 		var urlX = dir + '/ajax_get_6_month';
         
 	    
-        
 		// send  data  to  PHP handler  ************ 
         $.ajax({
             url: ajaxUrl, //ajaxUrl is a var registered in view,
@@ -104,7 +85,6 @@ $(document).ready(function(){
 				console.log(data);
             }	
         });
-                                       
 	}
 	
     // **                                                                                  **
@@ -112,11 +92,7 @@ $(document).ready(function(){
     // **************************************************************************************
 	
 	
-	
-	
-	
-	
-	
+
 	
 	
 	//Function to use in ajax SUCCESS section in function get_6_month(){. It builds 6 month view with badges
@@ -124,9 +100,7 @@ $(document).ready(function(){
     // **************************************************************************************
     //                                                                                     ** 
 	
-	function getAjaxAnswer_andBuild_6_month(dataX, idXZ){ //dataX is an ajax result from a BookingCphControler/public function actionAjax_get_6_month() //idXZ => id of clicked room
-		//alert(dataX.array_All_CountDays);
-		
+	function getAjaxAnswer_andBuild_6_month(dataX, idXZ){ //dataX is an ajax result from a BookingCphControler/public function actionAjax_get_6_month() //idXZ => id of clicked room		
 		//HTML This 1 current month
 		var finalText = '';//'<div class="col-sm-3 col-xs-5 my-month badge badge1" id="0"><span class="v">Current</div>';
 		
@@ -139,17 +113,10 @@ $(document).ready(function(){
 						' id=' + i + '> <span class="v">' + dataX.allMonths[i]  + '</span></div>';
 		}
 		
-
-		
-		//$('.badge:eq('+ i +')').attr('data-badge', dataX.array_All_CountDays[i]);	//assign interger to badge
-		
 		$(".all-6-month").stop().fadeOut("slow",function(){ $(this).html(finalText)}).fadeIn(2000);
-		
 		$("#roomSelected").html(dataX.selectedRoom); //html() room selected number in form <p> in  index.php
 		$("#roomNumberrr").val(dataX.selectedRoom); //val the form input "Room number" 
-		
-		
-		
+			
 	}
 	
 	// **                                                                                  **
@@ -159,37 +126,26 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	//Function to draw one single month
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
 	
-	 function get_1_single_month(thisX){
-		 $(".loader").show(200); //show the loader
+	function get_1_single_month(thisX){
+		$(".loader").show(200); //show the loader
 		 
-		 var roomZ = thisX.getAttribute("data-myRoom");; //gets selected room ID, take it from <div data-myRoom="">
-		 //alert(roomZ);
+		var roomZ = thisX.getAttribute("data-myRoom");; //gets selected room ID, take it from <div data-myRoom="">		 
+		var Unix = thisX.getAttribute("data-myUnix");
+		var firstDayUnix = Unix.split("/")[0];
+		var lastDayUnix = Unix.split("/")[1];
 		 
-		 var Unix = thisX.getAttribute("data-myUnix");
-		 var firstDayUnix = Unix.split("/")[0];
-		 var lastDayUnix = Unix.split("/")[1];
-		 //alert(firstDayUnix);
-		 
-		 //getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
-		 var loc = window.location.pathname;
-         var dir = loc.substring(0, loc.lastIndexOf('/'));
-		 var urlX = dir + '/ajax_get_1_month';
-		  //alert(urlX);
+		//getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
+		var loc = window.location.pathname;
+        var dir = loc.substring(0, loc.lastIndexOf('/'));
+		var urlX = dir + '/ajax_get_1_month';
 		
-		 // send  data  to  PHP handler  ************ 
-         $.ajax({
+		// send  data  to  PHP handler  ************ 
+        $.ajax({
             url: ajaxUrl2, //var is registered in view
             type: 'POST',
 			dataType: 'text' ,//'JSON', // without this it returned string(that can be alerted), now it returns object
@@ -209,8 +165,6 @@ $(document).ready(function(){
 				if(screen.width <= 640){ 
 				    setSameHight_JS();
 				}
-		
-			
 			},  //end success
 			error: function (error) {
 				$(".single-clicked-month").stop().fadeOut("slow",function(){ $(this).html("Failed")}).fadeIn(2000);
@@ -218,8 +172,6 @@ $(document).ready(function(){
         });
 	 }
 	
-	
-	
 	// **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************
@@ -227,58 +179,34 @@ $(document).ready(function(){
 	
 	
 	
+	//Click on a free green date in 1 month calendar
+	// **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     **
 	
-	/*
-	  $('a').tooltip({          
-          disabled: true,
-         close: function( event, ui ) { $(this).tooltip('disable'); }
-      });
-	  */
-	
-	
-
-
-
-	
-	 //Click on a free green date in 1 month calendar
-	 // **************************************************************************************
-     // **************************************************************************************
-     //                                                                                     **
-	
-	 $(document).on("click", '.free', function() {//this click is used to react to newly generated cicles;
-	    //alert("Sorry, this date is already booked");
-        //$(this).tooltip('enable').tooltip('open');
-		
-		
-		 var dayZ = this.getAttribute("data-dayZ"); //gets data-dayZ (it is set in {BookingCphControler/actionAjax_get_1_month()}, must be set there in format in format 2011-12-31
-		
-		
+	$(document).on("click", '.free', function() {//this click is used to react to newly generated cicles;
+		var dayZ = this.getAttribute("data-dayZ"); //gets data-dayZ (it is set in {BookingCphControler/actionAjax_get_1_month()}, must be set there in format in format 2011-12-31
 		//Sweet alert.
-		   swal({ title: dayZ.split("-")[2] + "." + dayZ.split("-")[1] + "." + dayZ.split("-")[0] + " is Free!", //Sweet alert   // 21.09.2011 is Free //dayZ is MM/DD/YY, change to DD/MM/DD/YY
-
-		       text: "Want to start booking from this date?", 
-		       type: "success", 
-		       showCancelButton: true, 
-			   confirmButtonClass: "btn-danger",
-			   //closeOnConfirm: false
-		   },
-		   function(valueX){
-			   if(valueX){ //if click OK tobook
-			       //alert(dayZ);  
-				   $("#rbacAdd").show(999); //open the form, change it from hidden to open
-				   scrollResults("#rbacAdd", ".parent().parent()."); //advanced scroll, scrolls to div with form //arg(DivID, levels to go up from DivID)
-				   $("#uniqueIDFrom").val(dayZ); //set clicked in calendar day to form_input_1  
-				   $("#uniqueIDTo").val(dayZ); //set clicked in calendar day to form_input_2 (just to help navigation)
-				   $("#uniqueIDTo").focus(); //set focus to input_2
-				   //$("#uniqueIDFrom").datepicker("setDate", new Date(2018, 8, 1));
-				   
-				   
-			   } else {    //if click cancel
-			       //alert('cancelled');
-				   
-			   }
-           });
-		   //end Swall callback 
+		swal({ title: dayZ.split("-")[2] + "." + dayZ.split("-")[1] + "." + dayZ.split("-")[0] + " is Free!", //Sweet alert   // 21.09.2011 is Free //dayZ is MM/DD/YY, change to DD/MM/DD/YY
+		    text: "Want to start booking from this date?", 
+		    type: "success", 
+		    showCancelButton: true, 
+			confirmButtonClass: "btn-danger",
+			//closeOnConfirm: false
+		},
+		function(valueX){
+			if(valueX){ //if click OK tobook
+				$("#rbacAdd").show(999); //open the form, change it from hidden to open
+				scrollResults("#rbacAdd", ".parent().parent()."); //advanced scroll, scrolls to div with form //arg(DivID, levels to go up from DivID)
+				$("#uniqueIDFrom").val(dayZ); //set clicked in calendar day to form_input_1  
+				$("#uniqueIDTo").val(dayZ); //set clicked in calendar day to form_input_2 (just to help navigation)
+				$("#uniqueIDTo").focus(); //set focus to input_2
+				//$("#uniqueIDFrom").datepicker("setDate", new Date(2018, 8, 1));
+			} else {    //if click cancel
+			    //alert('cancelled');
+			}
+        });
+		//end Swall callback 
 
 	});
 	// **                                                                                  **
@@ -287,12 +215,8 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	
-	
 	//Click on a booked date in 1 month calendar
-	 $(document).on("click", '.taken', function() {//this click is used to react to newly generated cicles;
+	$(document).on("click", '.taken', function() {//this click is used to react to newly generated cicles;
 	    //alert("Sorry, this date is already booked");
 		swal("Sorry!", "This date is already booked!", "error");
 	});
@@ -300,34 +224,22 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	
-	
-	
-		
 	//Click to delete a single booking, available for click when u select a certain month
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
-	   $(document).on("click", '.deleteBooking', function() {//this click is used to react to newly generated cicles;
-	        if (confirm("Are you sure to delete this booking?") == true) {
-				//alert(this.id);
-				run_ajax_to_delete_this_booking(this.id);
-                return true;
-            } else {
-                return false;
-            }
-	   });
-	
+	$(document).on("click", '.deleteBooking', function() {//this click is used to react to newly generated cicles;
+	    if (confirm("Are you sure to delete this booking?") == true) {
+		    run_ajax_to_delete_this_booking(this.id);
+            return true;
+        } else {
+            return false;
+        }
+	});
 	
 	// **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************
-	
-	
-	
-	
 	
 	
 	
@@ -336,20 +248,16 @@ $(document).ready(function(){
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
-	  function run_ajax_to_delete_this_booking(passedID){
-		 $(".loader").show(200); //show the loader
+	function run_ajax_to_delete_this_booking(passedID){
+		$(".loader").show(200); //show the loader
 		 
-		 
-		 //getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
-		 var loc = window.location.pathname;
-         var dir = loc.substring(0, loc.lastIndexOf('/'));
-		 var urlX = dir + '/ajax_delete_1_booking';
-		  //alert(urlX);
+		//getting the path to current folder with JS to form url for ajax, i.e /yii2_REST_and_Rbac_2019/yii-basic-app-2.0.15/basic/web/booking-cph/ajax_get_6_month
+		var loc = window.location.pathname;
+        var dir = loc.substring(0, loc.lastIndexOf('/'));
+		var urlX = dir + '/ajax_delete_1_booking';		
 		
-		
-		//alert(passedID);
-		 // send  data  to  PHP handler  ************ 
-         $.ajax({
+		// send  data  to  PHP handler  ************ 
+        $.ajax({
             url: urlX,
             type: 'POST',
 			dataType: 'json' ,//'JSON', // without this it returned string(that can be alerted), now it returns object
@@ -377,11 +285,6 @@ $(document).ready(function(){
     // **************************************************************************************
 	
 	
-	
-	
-	
-	
-	
 
 
    //function that sets the same hight for Guest List Table, uses function getTallestHeight. We use delay, as this div is loaded with animation for 2 sec and function can't see its classes ".colX"
@@ -391,24 +294,24 @@ $(document).ready(function(){
    //                                                                                     ** 
    function setSameHight_JS(){
 	    setTimeout(function(){
-			 var els = $('.colX');
-	         var s = getTallestHeight(els); //alert(s);
-             els.height(s);
+			var els = $('.colX');
+	        var s = getTallestHeight(els); //alert(s);
+            els.height(s);
 		}, 3000);	
-   }
+    }
    
-   function getTallestHeight(elements) {
-      var tallest = 0, height;
+    function getTallestHeight(elements) {
+        var tallest = 0, height;
 
-      for(i = 0; i < elements.length; i++) {
-        height = $(elements[i]).height();
+        for(i = 0; i < elements.length; i++) {
+            height = $(elements[i]).height();
 
-        if(height > tallest) 
-            tallest = height;
-      }
+            if(height > tallest) 
+               tallest = height;
+        }
 
-      return tallest;
-   };
+        return tallest;
+    };
 	
   // **                                                                                  **
   // **************************************************************************************
@@ -416,28 +319,17 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	
-	
+
 	
 		
 	//DISABLE BOOKED date in datepicker
-	
     var disabledDays = [
        "21-8-2019", "21-08-2019", "26-12-2016",
        "4-4-2017", "5-4-2017", "6-4-2017", "6-4-2016", "7-4-2017", "8-4-2017", "9-4-2017"
     ];
-	/*
-   $(document).on("change", '#uniqueIDFrom', function(e) {  //must have {e} to detect event //newly generated
-       if(disabledDays.indexOf($("#uniqueIDFrom").val()) == -1){
-	      alert("date already booked");
-	   }
-   });
-   */
 
 	
-//========================================================================================================================
+   //========================================================================================================================
 
 
 
@@ -445,24 +337,18 @@ $(document).ready(function(){
     
 	
 	
-  // **************************************************************************************
-  // **************************************************************************************
-  //                                                                                     **
+    // **************************************************************************************
+    // **************************************************************************************
+    //                                                                                     **
         
-  function addRemoveClass(passObjFromTableSelectAction){  //passObjFromTableSelectAction is $(this) passed from tableSelectAction(thisObjZ)
-    $(".subfolder").removeClass("selected");
-    passObjFromTableSelectAction.addClass("selected");//assign class to clicked
-  }
+    function addRemoveClass(passObjFromTableSelectAction){  //passObjFromTableSelectAction is $(this) passed from tableSelectAction(thisObjZ)
+        $(".subfolder").removeClass("selected");
+        passObjFromTableSelectAction.addClass("selected");//assign class to clicked
+    }
 
-// **                                                                                  **
-// **************************************************************************************
-// **************************************************************************************
-
-
-
-
-
-
+   // **                                                                                  **
+   // **************************************************************************************
+   // **************************************************************************************
 
 	
 	
@@ -473,18 +359,17 @@ $(document).ready(function(){
 	function scrollResults(divName, parent)  //arg(DivID, levels to go up from DivID)  //scrollResults("#roomNumber", ".parent().");
 	{   //if 2nd arg is not provided while calling the function with one arg
 		if (typeof(parent)==='undefined') {
-		
             $('html, body').animate({
                 scrollTop: $(divName).offset().top
                 //scrollTop: $('.your-class').offset().top
-             }, 'slow'); 
+            }, 'slow'); 
 		     // END Scroll the page to results
 		} else {
 			//if 2nd argument is provided
 			var stringX = "$(divName)" + parent + "offset().top";  //i.e constructs -> $("#divID").parent().parent().offset().top
 			$('html, body').animate({
                 scrollTop: eval(stringX)         //eval is must-have, crashes without it
-                }, 'slow'); 
+            }, 'slow'); 
 		}
 	}
 	
@@ -494,13 +379,9 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	
-	 // **************************************************************************************
+	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     ** 
-	
 	
 	function scroll_toTop() 
 	{
@@ -513,51 +394,39 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	   //LOADER SECTION
+   //LOADER SECTION
    // **************************************************************************************
    // **************************************************************************************
    //                                                                                     ** 
 	
 	var showPage = function(){   
-      document.getElementById("loaderX").style.display = "none"; //hides loader
-      document.getElementById("all").style.display = "block";    //show div id="all"
-   }
+        document.getElementById("loaderX").style.display = "none"; //hides loader
+        document.getElementById("all").style.display = "block";    //show div id="all"
+    }
 	
 	
 	
 	function appendLoaderDiv(){
-	   var elemDiv = document.createElement('div');
-	   elemDiv.id = "loaderX";
-       //elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100; top:20px;';
-	   //$("#loaderX").append('<img id="theImg" src="images/load.gif" />');
-	   //elemDiv.innerHTML = '<img id="theImg" src="images/load.gif" />'; 
-	   //elemDiv.style.backgroundColor = "black";
-	   //$("#loaderX").css("background", "url('images/load.gif')");
-       document.body.appendChild(elemDiv);
+	    var elemDiv = document.createElement('div');
+	    elemDiv.id = "loaderX";
+        //elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100; top:20px;';
+	    //$("#loaderX").append('<img id="theImg" src="images/load.gif" />');
+	    //elemDiv.innerHTML = '<img id="theImg" src="images/load.gif" />'; 
+	    //elemDiv.style.backgroundColor = "black";
+	    //$("#loaderX").css("background", "url('images/load.gif')");
+        document.body.appendChild(elemDiv);
 	} 
 	   
-	 if(document.getElementById("all") !== null){ //additional check to avoid errors in console in actions, other than actionShowAllBlogs(), when this id does not 
-	     appendLoaderDiv(); //appends a div id="loaderX" with pure CSS loader to body, no code in index.php, just css to mycss.css
-	     var myVar = setTimeout(showPage, 1000);
-	 }
+	if(document.getElementById("all") !== null){ //additional check to avoid errors in console in actions, other than actionShowAllBlogs(), when this id does not 
+	    appendLoaderDiv(); //appends a div id="loaderX" with pure CSS loader to body, no code in index.php, just css to mycss.css
+	    var myVar = setTimeout(showPage, 1000);
+	}
 	// **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************
 	 //END LOADER SECTION 
-	   
-	
 	
 });
 // end ready	
-	
 	
 }()); //END IIFE (Immediately Invoked Function Expression)
